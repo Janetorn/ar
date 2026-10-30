@@ -1,0 +1,133 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #000;
+    overflow: hidden;
+}
+
+/* AR-сцена на весь экран */
+a-scene {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 0;
+}
+
+/* Карточка книги */
+.book-card {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 92%;
+    max-width: 400px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    border: 2px solid #00ff00;
+    border-radius: 16px;
+    padding: 16px;
+    z-index: 10;
+    color: #fff;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.book-card.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(20px);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+
+.card-header h2 {
+    font-size: 1.1rem;
+    color: #ffff00;
+    flex: 1;
+    margin-right: 8px;
+}
+
+#close-card {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 4px;
+}
+
+.authors { font-size: 0.85rem; color: #ccc; margin-bottom: 4px; }
+.passport { font-size: 0.75rem; color: #aaa; margin-bottom: 2px; }
+.isbn { font-size: 0.75rem; color: #888; margin-bottom: 4px; }
+.rating { font-size: 0.85rem; color: #00ff00; margin-bottom: 2px; }
+.genre { font-size: 0.75rem; color: #00ccff; margin-bottom: 12px; }
+
+.quote-section {
+    border-left: 3px solid #ffa500;
+    padding-left: 10px;
+    margin: 12px 0;
+}
+
+.quote-section h3 {
+    font-size: 0.8rem;
+    color: #ffa500;
+    margin-bottom: 4px;
+}
+
+#card-quote {
+    font-size: 0.85rem;
+    color: #00ccff;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.source { font-size: 0.65rem; color: #666; margin-top: 4px; }
+
+.similar-section { margin: 12px 0; }
+.similar-section h3 { font-size: 0.8rem; color: #aaa; margin-bottom: 4px; }
+#card-similar { list-style: none; padding: 0; }
+#card-similar li { font-size: 0.8rem; color: #ccc; padding: 2px 0; }
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.actions button {
+    flex: 1 0 45%;
+    padding: 10px;
+    background: #2a2a2a;
+    border: 1px solid #00ff00;
+    border-radius: 8px;
+    color: #00ff00;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.actions button:active { background: #00ff00; color: #000; }
+
+/* Уведомления */
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    z-index: 100;
+    transition: opacity 0.3s;
+}
+
+.toast.hidden { opacity: 0; pointer-events: none; }

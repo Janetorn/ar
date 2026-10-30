@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AR Библиотека — три маркера</title>
+    <link rel="manifest" href="./manifest.json">
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- AR.js + A-Frame -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.5/aframe/build/aframe-ar.js"></script>
+</head>
+<body>
+    <!-- AR-сцена с тремя кастомными pattern-маркерами -->
+    <a-scene embedded arjs="sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+             vr-mode-ui="enabled: false"
+             renderer="logarithmicDepthBuffer: true;"
+             arjs-hit-testing="enabled: false">
+
+        <!-- Маркер 1: pattern-char1.patt -->
+        <a-marker type="pattern" url="./markers/pattern-char1.patt"
+                  id="marker-char1" emitevents="true">
+            <a-entity id="anchor-char1"></a-entity>
+        </a-marker>
+
+        <!-- Маркер 2: pattern-char2.patt -->
+        <a-marker type="pattern" url="./markers/pattern-char2.patt"
+                  id="marker-char2" emitevents="true">
+            <a-entity id="anchor-char2"></a-entity>
+        </a-marker>
+
+        <!-- Маркер 3: pattern-char3.patt -->
+        <a-marker type="pattern" url="./markers/pattern-char3.patt"
+                  id="marker-char3" emitevents="true">
+            <a-entity id="anchor-char3"></a-entity>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+    </a-scene>
+
+    <!-- HTML-карточка книги -->
+    <div id="book-card" class="book-card hidden">
+        <div class="card-header">
+            <h2 id="card-title">Название книги</h2>
+            <button id="close-card">✕</button>
+        </div>
+        <p id="card-authors" class="authors">Автор</p>
+        <p id="card-passport" class="passport">Год | Издательство | Страницы</p>
+        <p id="card-isbn" class="isbn">ISBN: —</p>
+        <p id="card-rating" class="rating">Рейтинг: —</p>
+        <p id="card-genre" class="genre">Жанр: —</p>
+        <div class="quote-section">
+            <h3>Цитата</h3>
+            <p id="card-quote">—</p>
+            <p class="source">Источник: citaty.info</p>
+        </div>
+        <div class="similar-section">
+            <h3>Похожие книги</h3>
+            <ul id="card-similar"></ul>
+        </div>
+        <div class="actions">
+            <button id="btn-music">🎵 Яндекс Музыка</button>
+            <button id="btn-new-quote">🔄 Другая цитата</button>
+            <button id="btn-bookmark">🔖 В закладки</button>
+            <button id="btn-show-bookmarks">📋 Список закладок</button>
+        </div>
+    </div>
+
+    <!-- Уведомления -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="./js/books.js"></script>
+    <script src="./js/quotes.js"></script>
+    <script src="./js/app.js"></script>
+
+    <!-- Регистрация Service Worker -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('./sw.js');
+    }
+    </script>
+</body>
+</html>

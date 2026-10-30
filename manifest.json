@@ -1,0 +1,10 @@
+{
+  "name": "AR Библиотека",
+  "short_name": "AR Library",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#00ff00"
+}
