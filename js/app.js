@@ -18,8 +18,13 @@ function saveBookmark(title, isbn) {
         return;
     }
     bookmarks.push({ title, isbn, time: new Date().toISOString() });
-    localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
-    showToast(`Закладка добавлена: ${title}`);
+    try {
+        localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(bookmarks));
+        showToast(`Закладка добавлена: ${title}`);
+    } catch (e) {
+        console.error("[Bookmarks] Ошибка сохранения:", e);
+        showToast("Не удалось сохранить закладку (память переполнена?)");
+    }
 }
 
 function showBookmarksList() {
@@ -37,7 +42,9 @@ function showToast(msg) {
     const toast = document.getElementById("toast");
     toast.textContent = msg;
     toast.classList.remove("hidden");
-    setTimeout(() => toast.classList.add("hidden"), 2500);
+    // Сбрасываем таймер, если уведомления идут подряд
+    if (window.toastTimeout) clearTimeout(window.toastTimeout);
+    window.toastTimeout = setTimeout(() => toast.classList.add("hidden"), 2500);
 }
 
 // ========== Состояние карточки ==========
@@ -80,13 +87,11 @@ function hideCard() {
     currentIsbn = null;
 }
 
-// ========== AR-события: три кастомных маркера ==========
-
-// Привязка DOM-id маркера → bookId (индекс в BOOK_ISBN_MAP / LOCAL_DATA / CITATY_URL_MAP)
+// ========== AR-события ==========
 const MARKER_BOOK_MAP = {
-    "marker-char1": 0,   // pattern-char1.patt → книга №0
-    "marker-char2": 1,   // pattern-char2.patt → книга №1
-    "marker-char3": 2,   // pattern-char3.patt → книга №2
+    "marker-char1": 0,
+    "marker-char2": 1,
+    "marker-char3": 2,
 };
 
 function bindMarker(markerEl, bookId) {
@@ -97,23 +102,19 @@ function bindMarker(markerEl, bookId) {
 
     markerEl.addEventListener("markerFound", async () => {
         console.log(`[AR] Обнаружен маркер: ${markerEl.id} (bookId=${bookId})`);
-
         const bookInfo = await getBookInfo(bookId);
         const quote = await getRandomQuote(bookId);
-
         showCard(bookId, bookInfo, quote);
     });
 
     markerEl.addEventListener("markerLost", () => {
         console.log(`[AR] Маркер потерян: ${markerEl.id}`);
-        // Скрываем карточку только если потерян именно текущий маркер
         if (currentBookId === bookId) {
             hideCard();
         }
     });
 }
 
-// Навешиваем обработчики на все три маркера
 bindMarker(document.getElementById("marker-char1"), MARKER_BOOK_MAP["marker-char1"]);
 bindMarker(document.getElementById("marker-char2"), MARKER_BOOK_MAP["marker-char2"]);
 bindMarker(document.getElementById("marker-char3"), MARKER_BOOK_MAP["marker-char3"]);
@@ -143,7 +144,13 @@ document.getElementById("btn-new-quote").addEventListener("click", () => {
 });
 
 document.getElementById("btn-bookmark").addEventListener("click", () => {
-    if (!currentBookInfo || !currentIsbn) return;
+    // Диагностика для консоли
+    console.log("[Закладки] Попытка добавления. currentBookInfo:", currentBookInfo, "currentIsbn:", currentIsbn);
+    
+    if (!currentBookInfo || !currentIsbn) {
+        showToast("Данные книги ещё не загружены");
+        return;
+    }
     saveBookmark(currentBookInfo.title || "Неизвестно", currentIsbn);
 });
 
