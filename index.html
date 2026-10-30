@@ -6,7 +6,11 @@
     <title>AR Библиотека </title>
     <link rel="manifest" href="./manifest.json">
     <link rel="stylesheet" href="./css/style.css">
-    <!-- AR.js + A-Frame -->
+    
+    <!-- 1. Сначала загружаем ядро A-Frame (версия 1.5.0 стабильна) -->
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    
+    <!-- 2. Затем загружаем AR.js (используем jsDelivr, чтобы избежать таймаутов) -->
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.5/aframe/build/aframe-ar.js"></script>
 </head>
 <body>
